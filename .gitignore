@@ -2,5 +2,5 @@ __pycache__
 *.pyc
 *~
 #*#
-*.vcd
-!vexriscv/gcd.vcd
+*.log
+build

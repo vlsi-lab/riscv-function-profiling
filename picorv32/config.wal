@@ -1,3 +1,0 @@
-; Picorv32 
-(defmacro fire [] `(&& (rising testbench.clk) testbench.resetn testbench.uut.launch_next_insn))
-(alias pc testbench.uut.next_pc)

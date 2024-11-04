@@ -1,3 +1,0 @@
-; VexRiscv
-(defmacro fire [] `(&& (rising TOP.clk) (! TOP.reset) TOP.VexRiscv.lastStageIsFiring))
-(alias pc TOP.VexRiscv.lastStagePc)
