@@ -29,10 +29,10 @@ def ranges(binary_file):
 
     for line in symbols.split('\n'):
         cols = line.split()
-        if len(cols) == 4 and cols[2] == 'T':
+        if len(cols) == 4 and cols[2] in ['T', 't']:
             name = cols[3]
             start = int(cols[0], 16)
-            end = start + int(cols[1], 16) - 4
+            end = start + int(cols[1], 16) - 2
             res.append([name, start, end])
 
     return res
@@ -61,6 +61,7 @@ if __name__ == '__main__':
     def count_function(seval, args):
         addr = seval.eval(args[0])
         instr = seval.eval(args[1])
+        mcycle = seval.eval(args[2])
 
         assert (len(buffer) == 0 or len(buffer) == 1)
 
@@ -70,7 +71,7 @@ if __name__ == '__main__':
             # Return with the new func name
             for function in functions:
                 if addr >= function[1] and addr <= function[2]:
-                    cs.ret(function[0])
+                    cs.ret(function[0], mcycle)
         
         if (instr in RET or instr in MRET):
             if (len(buffer) == 0):
@@ -80,12 +81,15 @@ if __name__ == '__main__':
 
         for function in functions:
             if addr >= function[1] and addr <= function[2]:
-                cs.call(function[0], addr)
+                cs.call(function[0], addr, mcycle)
                 return
+        
+        # If the function is not found, print the address
+        print("[WARNING] Function not found for address: 0x{:08x}".format(addr))
 
 
     wal.register_operator("count-function", count_function)
 
-    instructions_executed = wal.eval_str('(whenever (fire) (count-function pc instr))', funcs=functions)
+    instructions_executed = wal.eval_str('(whenever (fire) (count-function pc instr mcycle))', funcs=functions)
 
     cs.generate_flamegraph_data(FG_DATA)
