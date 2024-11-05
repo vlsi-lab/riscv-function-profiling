@@ -71,7 +71,7 @@ if __name__ == '__main__':
             # Return with the new func name
             for function in functions:
                 if addr >= function[1] and addr <= function[2]:
-                    cs.ret(function[0], mcycle)
+                    cs.ret(function[0], addr, mcycle)
         
         if (instr in RET or instr in MRET):
             if (len(buffer) == 0):
