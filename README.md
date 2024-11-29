@@ -58,3 +58,8 @@ The config file specifies
 ```
 
 So you have to change `(alias clk ....)` to `(alias clk your.clk.signal)`
+
+## Contributing
+If you want to contribute to this project, please open an issue or a pull request. We are happy to help you with any questions you might have.
+
+If you use this tool on a different RISC-V core please open a pull request so that we can include it in the repository.
