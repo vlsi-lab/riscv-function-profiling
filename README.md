@@ -6,7 +6,7 @@ This project is built upon the existing [RISC-V Function Profiling](https://gith
 The output of the profiler is a flamegraph that visualizes the time spent in each function. The flamegraph is generated using the [FlameGraph](https://github.com/brendangregg/FlameGraph).
 
 Example of generated flamegraph (click to zoom in):
-![FlameGraph](./docs/flamegraph.svg)
+![FlameGraph](https://vincenzo-petrolo.github.io/flamegraph_example/flamegraph.svg)
 
 ## Dependencies
 The only requirement for this script are `wal-lang` and `pylibfst` Python packages.
