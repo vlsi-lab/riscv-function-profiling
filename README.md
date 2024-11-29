@@ -9,11 +9,11 @@ Example of generated flamegraph (click to zoom in):
 ![FlameGraph](./docs/flamegraph.svg)
 
 ## Dependencies
-The only requirement for this script is Python < 3.10 and the `wal-lang` Python package (tested with Python 3.9).
+The only requirement for this script are `wal-lang` and `pylibfst` Python packages.
 
-Install WAL by typing:
+Install the dependencies using:
 ```
-pip install wal-lang==0.8.2 pylibfst
+pip install -r requirements.txt
 ```
 
 ## Getting Started
