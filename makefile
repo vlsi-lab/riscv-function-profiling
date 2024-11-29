@@ -19,7 +19,10 @@ $(FG_DATA): $(TEST_DIR)/config.wal $(MAIN_ELF) $(WAVES) $(BUILD_DIR)
 test: $(FG_DATA) $(SVG)
 
 $(SVG): $(FG_DATA)
+	# Generating SVG flamegraph...
 	cd sw/vendor/FlameGraph && ./flamegraph.pl --flamechart $(FG_DATA) > $(SVG)
+	# Changing SVG colormap...
+	$(PYTHON3) src/colors.py $(SVG)
 
 .PHONY: clean
 clean:
