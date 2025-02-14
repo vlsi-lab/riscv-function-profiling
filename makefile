@@ -6,14 +6,16 @@ PYTHON3 ?= python3
 MAIN_ELF ?= $(TEST_DIR)/main.elf
 WAVES	 ?= $(TEST_DIR)/waves.fst
 SVG      ?= $(BUILD_DIR)flamegraph.svg
+CFG_DATA ?= $(TEST_DIR)/config.wal
+ARGS	 ?= --elf $(MAIN_ELF) --fst $(WAVES) --cfg $(CFG_DATA)
 
 
 .PHONY: vendor-update
 vendor-update:
 	find sw/vendor -maxdepth 1 -type f -name "*.vendor.hjson" -exec python3 util/vendor.py -vU '{}' \;
 
-$(FG_DATA): $(TEST_DIR)/config.wal $(MAIN_ELF) $(WAVES) $(BUILD_DIR)
-	cd $(TEST_DIR) && $(PYTHON3) ../src/riscv-profile.py $(MAIN_ELF) $(WAVES) $(FG_DATA)
+$(FG_DATA): $(TEST_DIR)/config.wal $(MAIN_ELF) $(WAVES) $(CFG_DATA) $(BUILD_DIR)
+	$(PYTHON3) src/rv_profile.py $(ARGS)
 
 .PHONY: test
 test: $(FG_DATA) $(SVG)

@@ -1,9 +1,8 @@
 #!/bin/python
 from wal.core import Wal
-import sys
 import os
 import subprocess
-from CallStack import CallStack
+from rv_profile.CallStack import CallStack
 
 RET=(0x8082, )
 MRET=(0x30200073,)
@@ -16,8 +15,8 @@ def ranges(binary_file):
     if 'RISCV_PREFIX' in os.environ:
         proc = subprocess.Popen( [ os.environ['RISCV_PREFIX'] + 'nm' , '-S', binary_file], stdout=subprocess.PIPE )
     else:
-        print('Please add the location of you RISC-V toolchain to the "RISCV_PREFIX" variable.')
-        print('Now trying to fall back to the regular "nm"..\n')
+        # print('Please add the location of you RISC-V toolchain to the "RISCV_PREFIX" variable.')
+        # print('Now trying to fall back to the regular "nm"..\n')
         try:
             proc = subprocess.Popen( [ 'nm' , '-S', binary_file], stdout=subprocess.PIPE )
         except:
@@ -39,16 +38,11 @@ def ranges(binary_file):
 
 
 
-if __name__ == '__main__':
-    if len(sys.argv) < 4:
-        print('Usage:')
-        print('  profile.py elf vcd flamegraph')
-        exit(1)
-    
-    BIN     = sys.argv[1]
-    VCD     = sys.argv[2]
-    FG_DATA = sys.argv[3]
-    VERBOSE = False
+def riscv_profile_main(elf, fst, cfg, output, step):
+    BIN         = elf
+    VCD         = fst
+    CFG_FILE    = cfg
+    FG_DATA     = output
 
     cs      = CallStack(verbose=False)
     functions = ranges(BIN)
@@ -56,7 +50,9 @@ if __name__ == '__main__':
 
     wal     = Wal()
     wal.load(VCD)
-    wal.eval_str('(eval-file config)') # require config script to get concrete signal names
+    
+
+    wal.eval_str(f'(eval-file {CFG_FILE})') # require config script to get concrete signal names
 
     def count_function(seval, args):
         addr = seval.eval(args[0])
@@ -81,12 +77,10 @@ if __name__ == '__main__':
 
         for function in functions:
             if addr >= function[1] and addr <= function[2]:
-                cs.call(function[0], addr, mcycle)
-                return
-        
-        # If the function is not found, print the address
-        print("[WARNING] Function not found for address: 0x{:08x}".format(addr))
+                    cs.call(function[0], addr, mcycle)
+                    return
 
+    wal.step(step)
 
     wal.register_operator("count-function", count_function)
 

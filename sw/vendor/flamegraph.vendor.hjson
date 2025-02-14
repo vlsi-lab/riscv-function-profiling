@@ -1,9 +1,0 @@
-{
-  name: "FlameGraph",
-  target_dir: "FlameGraph",
-
-  upstream: {
-    url: "https://github.com/brendangregg/FlameGraph.git",
-    rev: "master",
-  },
-}

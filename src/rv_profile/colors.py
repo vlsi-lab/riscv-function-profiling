@@ -56,7 +56,7 @@ def remove_background_from_svg(svg_root):
                 elem.attrib['fill'] = 'none'
     return svg_root
 
-def main(input_svg_path, output_svg_path, colormap):
+def fix_color(input_svg_path):
     # Load the SVG file
     tree = ET.parse(input_svg_path)
     root = tree.getroot()
@@ -76,10 +76,4 @@ def main(input_svg_path, output_svg_path, colormap):
     modified_svg_root = remove_background_from_svg(modified_svg_root)
 
     # Save the modified SVG
-    tree.write(output_svg_path)
-
-if __name__ == "__main__":
-    input_svg = sys.argv[1]
-    output_svg = sys.argv[1]
-
-    main(input_svg, output_svg, colormap)
+    tree.write(input_svg_path)
