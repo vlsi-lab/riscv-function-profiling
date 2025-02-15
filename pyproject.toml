@@ -6,10 +6,10 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "rv_profile"
-version = "0.2.0"
+version = "0.2.1"
 description = "A tool for generating flamegraphs of RISC-V programs running on RTL simulations"
 readme = "README.md"
-authors = [{ name = "Vincenzo Petrolo", email = "vincenzo.petrolo@polito.it" }]
+authors = [{ name = "Vincenzo Petrolo", email = "vincenzo.petrolo99@gmail.com" }]
 license = { text = "MIT" }
 dependencies = [
     "pylibfst==0.2.0",

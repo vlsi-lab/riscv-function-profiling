@@ -1,47 +1,32 @@
-# RISC-V Function Profiling from Waveforms + FlameGraph
+# rv_profile 
+[![PyPI version](https://img.shields.io/pypi/v/rv-profile)](https://pypi.org/project/rv-profile/)
+![License](https://img.shields.io/pypi/l/rv-profile)
 
-This project implements a function-level RISC-V profiler that extracts the time spent in each function out of a simulation waveform (`.vcd` and `.fst` are supported).
-This project is built upon the existing [RISC-V Function Profiling](https://github.com/LucasKl/riscv-function-profiling) project by LucasKl and [WAL](https://github.com/ics-jku/wal).
-
-The output of the profiler is a flamegraph that visualizes the time spent in each function. The flamegraph is generated using the [FlameGraph](https://github.com/brendangregg/FlameGraph).
-
-Example of generated flamegraph ([click](https://vincenzo-petrolo.github.io/flamegraph_example/flamegraph.svg) to interact with the flamegraph):
 ![FlameGraph](https://vincenzo-petrolo.github.io/flamegraph_example/flamegraph.svg)
 
-## Dependencies
-The only requirement for this script are `wal-lang` and `pylibfst` Python packages.
+This project implements a cycle-accurate RISC-V profiler that extracts the cycles spent in each function from RTL simulations.
 
-Install the dependencies using:
+
+An interactive example is found [here](https://vincenzo-petrolo.github.io/flamegraph_example/flamegraph.svg).
+
+## Installing
 ```
-pip install -r requirements.txt
+pip install rv-profile
 ```
 
-## Getting Started
-To set up the project and run an example test, use the following commands:
-```bash
-git clone https://github.com/Vincenzo-Petrolo/riscv-function-profiling.git
-cd riscv-function-profiling
-make vendor-update
-make test
-```
-This will generate the `flamegraph.svg` image in the `build` directory for an example application running on the [cv32e40x](https://github.com/openhwgroup/cv32e40x) core in
-the [X-HEEP](https://github.com/esl-epfl/x-heep) system.
-
-## Profiling Waveforms
+## Using
 To profile a waveform you need to have a RISC-V `.elf` binary and a `.vcd`/`.fst` waveform of a RISC-V core running the binary.
-This repository contains an example for the cv32e40x core. More will be added in the future (where possible).
+This repository contains an example for the [cv32e40x](https://github.com/Vincenzo-Petrolo/riscv-function-profiling/blob/main/cv32e40x/) core. More will be added in the future.
 
-## Usage
-To get a grasp of how to use the script please take a look into the [Makefile](https://github.com/Vincenzo-Petrolo/riscv-function-profiling/blob/main/makefile). Additionally, you can run the script with the following command:
 ```bash
-python3 profile.py <.elf file> <.vcd/.fst file> <.data flamegraph output file>
+rv_profile --elf <.elf> --fst <.vcd/.fst file> --cfg <.wal file> [--out <flamegraph.svg>]
 ```
 
-## How does it work?
+<!-- ## How does it work?
 1. This program extracts information about the functions from the `.elf` file using the "nm" command. This command prints a list of all symbols and their sizes.
 2. Using this information the start and end addresses of functions are calculated. Then, the WAL code, which is embedded into the main script similar to SQL queries, searches the waveform for all executed instructions and their location in the binary.
 3. The script further tracks the calls/returns of functions and calculates the time spent in each function and each of the child calls using the `mcycle` performance counter. The output is a flamegraph (`.data` file). 
-4. Eventually, the `.data` file is converted to a `.svg` image using the FlameGraph perl script.
+4. Eventually, the `.data` file is converted to a `.svg` image using the FlameGraph perl script. -->
 
 ## Adapting to Other Cores
 To adapt a new core to this script is easy. All you have to do is to know the name of the clk signal, detect when an instruction is committed, which address this instruction had and the raw value of the instruction (i.e. the 32-bit value).
@@ -63,3 +48,8 @@ So you have to change `(alias clk ....)` to `(alias clk your.clk.signal)`
 If you want to contribute to this project, please open an issue or a pull request. We are happy to help you with any questions you might have.
 
 If you use this tool on a different RISC-V core please open a pull request so that we can include it in the repository.
+
+### Repositories that made this possible
+* [RISC-V Function Profiling](https://github.com/LucasKl/riscv-function-profiling) 
+* [WAL](https://github.com/ics-jku/wal)
+* [FlameGraph](https://github.com/brendangregg/FlameGraph).
